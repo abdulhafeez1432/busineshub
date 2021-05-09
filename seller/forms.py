@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from multiupload.fields import MultiFileField
 
 
 class SellerProfileForm(forms.ModelForm):
@@ -23,6 +24,8 @@ class AboutBusinessForm(forms.ModelForm):
 
 
 class DocumentBusinessForm(forms.ModelForm):
+    #document = MultiFileField(required=False)
+
     class Meta:
         model = BusinessDocument
         exclude = ('business', 'created_at', 'updated_at',)

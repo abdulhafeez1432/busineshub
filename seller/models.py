@@ -245,8 +245,9 @@ class BusinessDocument(models.Model):
     """Model definition for BusinessDocument."""
     business = models.ForeignKey(
         Business, related_name='document', on_delete=models.CASCADE)
-    document = models.ImageField("Passport Phpassotography", upload_to='documents/', validators=[
-                                 validate_file_size, validate_file_extension02], null=True)
+    #itle = models.CharField(max_length=255, blank=True)
+    document = models.ImageField(
+        "Passport Phpassotography", upload_to='documents/',  null=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

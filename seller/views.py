@@ -13,14 +13,7 @@ from .forms import *
 from .models import *
 from django.contrib.messages.views import SuccessMessageMixin
 import random
-import string
-from decimal import Decimal
-from django.http import JsonResponse, HttpResponse
-import json
-import logging
-
-
-def create_ref_code():
+import stringSellerProfile
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
 
 
@@ -62,24 +55,6 @@ def SellerProfile(request, pk):
             return redirect('seller:about-business', pk=about.id)
 
     return render(request, template_name, {'form': form}) """
-
-
-def AddBusinessDocument(request, pk):
-    template_name = 'seller/adddocumentbusiness.html'
-    document = get_object_or_404(BusinessDocument, pk=pk)
-    form = DocumentBusinessForm(
-        request.POST or None, request.FILES or None, instance=document)
-    if request.method == "POST":
-        if form.is_valid():
-            document = form.save(commit=False)
-            user = request.user
-            document.user = user
-            document.save()
-            # d = BusinessTarget.objects.get(pk=target.pk)
-            # document = BusinessDocument.objects.create(business=d)
-            return redirect('seller:seller-dashboard')
-
-    return render(request, template_name, {'form': form})
 
 
 def SellerProfile(request, pk):
@@ -257,3 +232,43 @@ def AddTargetBusiness(request, pk):
             return JsonResponse({"errors": errors}, status=400)
 
     return render(request, template_name, {'form': form, 'target': target})
+
+
+@seller_required
+@login_required
+def AddBusinessDocument(request, pk):
+    template_name = 'seller/adddocumentbusiness.html'
+
+    d = get_object_or_404(BusinessDocument, pk=pk)
+    photos_list = BusinessDocument.objects.filter(business=d.business.pk)
+    print(photos_list)
+    form = DocumentBusinessForm(
+        request.POST or None, request.FILES or None, instance=d)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+        else:
+            return JsonResponse({'error': True, 'errors': form.errors})
+
+    return render(request, template_name, {' form': form, 'd': d})
+
+
+'''
+if request.method == "POST":
+        if form.is_valid():
+            for img in form.cleaned_data['document']:
+                print(img)
+                document = BusinessDocument.objects.create(
+                    document=img, business=business)
+                # document = form.save()
+                data = {'is_valid': True, 'name': document.document.name,
+                        'url': document.document.url}
+        else:
+            data = {'is_valid': False}
+        return JsonResponse(data)
+
+    return render(request, template_name, {'form': form, 'd': d, 'photos': photos_list})
+
+
+'''

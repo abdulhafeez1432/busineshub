@@ -8,7 +8,10 @@
 
 {% include "seller/header.html" %}
    
-   
+
+
+
+
   <!-- BEGIN: Content-->
     <div class="app-content content ">
         <div class="content-overlay"></div>
@@ -98,22 +101,15 @@
                                     <h5 class="mb-0">Account Details</h5>
                                     <small class="text-muted">Enter Your Account Details.</small>
                                 </div>
-                                 <form id="sell-business" method="POST" enctype="multipart/form-data">
-                                    {% csrf_token %}
+                               
                                 
                                    
 
+                            <form enctype="multipart/form-data" id="id_ajax_upload_form" method="POST"  novalidate="">
+                                {% csrf_token %}
+                                <input class="form-control" name="document" type="file" id="formFileMultiple" multiple />
 
-                                    <div class="row">
-                                        <div class="form-group col-md-12">
-                                            {{ form.document|as_crispy_field }}   
-
-                                                                                 
-                                        </div>
-                                        
-                                    </div>
-
-
+      
 
                                     
                                     <br/> <br/> <br/>
@@ -264,6 +260,10 @@
         </div>
     </div>
     <!-- END: Content-->
+
+
+  
+      
 
 
 {% endblock content %} 
